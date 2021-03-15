@@ -1,5 +1,5 @@
 <template>
   <div>
-    <Nuxt class="auth-page" />
+    <Nuxt class="success-page" />
   </div>
 </template>
