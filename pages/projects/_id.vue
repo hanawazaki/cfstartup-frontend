@@ -10,49 +10,23 @@
         <div class="w-3/4 mr-6">
           <div class="bg-white p-3 mb-3 border border-gray-400 rounded-20">
             <figure class="item-image">
-              <img src="/project-image.jpg" alt="" class="rounded-20 w-full" />
+              <img :src="default_image" alt="" class="rounded-20 w-full" />
             </figure>
           </div>
           <div class="flex -mx-2">
             <div
+              v-for="image in campaign.data.images"
+              :key="image.image_url"
               class="relative w-1/4 bg-white m-2 p-2 border border-gray-400 rounded-20"
             >
-              <figure class="item-thumbnail">
+              <figure
+                class="item-thumbnail"
+                @click="
+                  changeImage($axios.defaults.baseURL + '/' + image.image_url)
+                "
+              >
                 <img
-                  src="/project-slider-1.jpg"
-                  alt=""
-                  class="rounded-20 w-full"
-                />
-              </figure>
-            </div>
-            <div
-              class="relative w-1/4 bg-white m-2 p-2 border border-gray-400 rounded-20"
-            >
-              <figure class="item-thumbnail">
-                <img
-                  src="/project-slider-2.jpg"
-                  alt=""
-                  class="rounded-20 w-full"
-                />
-              </figure>
-            </div>
-            <div
-              class="relative w-1/4 bg-white m-2 p-2 border border-gray-400 rounded-20"
-            >
-              <figure class="item-thumbnail">
-                <img
-                  src="/project-slider-3.jpg"
-                  alt=""
-                  class="rounded-20 w-full"
-                />
-              </figure>
-            </div>
-            <div
-              class="relative w-1/4 bg-white m-2 p-2 border border-gray-400 rounded-20"
-            >
-              <figure class="item-thumbnail">
-                <img
-                  src="/project-slider-4.jpg"
+                  :src="$axios.defaults.baseURL + '/' + image.image_url"
                   alt=""
                   class="rounded-20 w-full"
                 />
@@ -162,6 +136,36 @@ export default {
   async asyncData({ $axios, params }) {
     const campaign = await $axios.$get('/api/v1/campaigns/' + params.id)
     return { campaign }
+  },
+  data() {
+    return {
+      default_image: '',
+      transactions: {
+        amount: 0,
+        campaign_id: Number.parseInt(this.$route.params.id),
+      },
+    }
+  },
+  methods: {
+    changeImage(url) {
+      this.default_image = url
+    },
+    async fund() {
+      try {
+        let response = await this.$axios.post(
+          '/api/v1/transactions',
+          this.transactions
+        )
+        window.location = response.data.payment_url
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+  mounted() {
+    this.default_image =
+      this.$axios.defaults.baseURL + '/' + this.campaign.data.image_url
   },
 }
 </script>
