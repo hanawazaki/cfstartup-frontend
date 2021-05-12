@@ -73,8 +73,11 @@ export default {
             propertyName: 'data.token',
           },
           logout: false,
-          user: { url: '/api/v1/users/fetch', method: 'get' },
-          propertyName: 'data',
+          user: {
+            url: '/api/v1/users/fetch',
+            method: 'get',
+            propertyName: 'data',
+          },
         },
       },
     },

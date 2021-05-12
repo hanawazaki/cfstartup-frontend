@@ -63,7 +63,7 @@
             :src="
               $axios.defaults.baseURL + '/' + $store.state.auth.user.image_url
             "
-            alt=""
+            alt="foto"
             v-if="$store.state.auth.user.image_url"
             class="h-8 rounded-full mr-2"
           />
